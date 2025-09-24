@@ -262,9 +262,9 @@
             font-weight: 500;
         }
 
-        /* Filter Section */
+        /* Filter Section - Design Moderno */
         .filter-section {
-            background: var(--white);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             padding: 3rem 0;
             box-shadow: var(--shadow);
         }
@@ -291,27 +291,41 @@
 
         .filter-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--gray-dark);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .filter-group select,
         .filter-group input {
             width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 0.5rem;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 12px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
             background: var(--white);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23666" d="M6 8L2 4h8z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 12px;
+        }
+
+        .filter-group input {
+            background-image: none;
         }
 
         .filter-group select:focus,
         .filter-group input:focus {
             outline: none;
-            border-color: var(--orange);
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.25);
+            border: 2px solid var(--secondary-blue);
         }
 
         .search-section {
@@ -322,33 +336,36 @@
 
         .search-input {
             flex: 1;
-            padding: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 0.5rem;
+            padding: 1.2rem 1.5rem;
+            border: none;
+            border-radius: 25px;
             font-size: 1rem;
+            background: var(--white);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
 
         .search-input:focus {
             outline: none;
-            border-color: var(--orange);
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(59, 130, 246, 0.25);
         }
 
         .search-button {
-            background: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
             color: var(--white);
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
+            padding: 1.2rem 2rem;
+            border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
         }
 
         .search-button:hover {
-            background: #1d4ed8;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.6);
         }
 
         /* Cars Section */
@@ -758,8 +775,16 @@
                 display: flex;
             }
 
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .hero {
+                padding: 6rem 0 3rem;
+            }
+
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
 
             .hero-buttons {
@@ -767,20 +792,48 @@
                 align-items: center;
             }
 
-            .filter-grid {
-                grid-template-columns: 1fr;
+            .filter-section {
+                padding: 2rem 0;
             }
 
-            .cars-grid {
+            .filter-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .filter-group select,
+            .filter-group input {
+                padding: 1.2rem 1.5rem;
+                font-size: 1.1rem;
+                border-radius: 15px;
+                min-height: 50px;
+            }
+
+            .search-input {
+                padding: 1.3rem 1.5rem;
+                font-size: 1.1rem;
+            }
+
+            .search-button {
+                padding: 1.3rem 2rem;
+                font-size: 1.1rem;
+                border-radius: 20px;
             }
 
             .search-section {
                 flex-direction: column;
             }
 
+            .cars-grid {
+                grid-template-columns: 1fr;
+            }
+
             .car-actions {
                 grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
             }
         }
 
@@ -1080,7 +1133,6 @@
         // Caricamento dati XML
         async function loadCarsFromXML() {
             showLoading(true);
-
             try {
                 await loadFallbackData();
             } catch (error) {
@@ -1088,46 +1140,6 @@
                 showError('Errore nel caricamento delle auto. Riprova più tardi.');
             } finally {
                 showLoading(false);
-            }
-        }
-
-        // Caricamento feed XML reale (per produzione)
-        async function loadRealXMLFeed() {
-            try {
-                const response = await fetch('/api/cars', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const jsonData = await response.json();
-
-                if (!jsonData.success) {
-                    throw new Error(jsonData.message || 'Errore nel caricamento dei dati');
-                }
-
-                carsData = jsonData.data.map(car => ({
-                    ...car,
-                    cv: car.cv || Math.round(car.power * 1.36)
-                }));
-
-                filteredCars = [...carsData];
-                initializeFilters();
-                displayCars();
-                updateResultsCount();
-
-                trackEvent('cars_loaded', carsData.length);
-
-                return true;
-            } catch (error) {
-                console.error('Errore nel caricamento del feed XML:', error);
-                await loadFallbackData();
-                return false;
             }
         }
 
@@ -1375,222 +1387,6 @@
                                 "https://via.placeholder.com/400x250/f97316/ffffff?text=500X+Detail"
                             ],
                             options: ["ABS", "Climatizzatore", "Cerchi in lega", "ESP", "Bluetooth", "Uconnect", "City Brake Control"]
-                        },
-                        {
-                            id: "22567890",
-                            make: "JEEP",
-                            model: "Compass",
-                            version: "1.4 MultiAir 170 CV Limited",
-                            body: "Fuoristrada",
-                            fuel: "Benzina",
-                            year: 2020,
-                            km: 45000,
-                            price: 24500,
-                            power: 170,
-                            cc: 1368,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Automatico",
-                            color: "Grigio",
-                            subtitle: "LIMITED - 4WD",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Jeep+Compass",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=Compass+Interior",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=Compass+4WD"
-                            ],
-                            options: ["Cruise Control", "Sistema di navigazione", "ABS", "Climatizzatore", "Interni in pelle", "Cerchi in lega", "ESP", "4WD", "Uconnect"]
-                        },
-                        {
-                            id: "22678901",
-                            make: "FORD",
-                            model: "Focus",
-                            version: "1.0 EcoBoost 125 CV ST-Line",
-                            body: "Berlina",
-                            fuel: "Benzina",
-                            year: 2021,
-                            km: 28000,
-                            price: 21900,
-                            power: 125,
-                            cc: 999,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Manuale",
-                            color: "Blu",
-                            subtitle: "ST-LINE SPORT",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Ford+Focus",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=Focus+ST-Line",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=Focus+Sport"
-                            ],
-                            options: ["ABS", "Climatizzatore", "Cerchi in lega", "ESP", "ST-Line Package", "SYNC 3", "Bluetooth"]
-                        },
-                        {
-                            id: "22789012",
-                            make: "TOYOTA",
-                            model: "C-HR",
-                            version: "1.8 Hybrid Active",
-                            body: "Fuoristrada",
-                            fuel: "Ibrido",
-                            year: 2022,
-                            km: 22000,
-                            price: 26900,
-                            power: 122,
-                            cc: 1798,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Automatico",
-                            color: "Grigio",
-                            subtitle: "HYBRID - BASSI CONSUMI",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Toyota+C-HR",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=C-HR+Hybrid",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=C-HR+Interior"
-                            ],
-                            options: ["Cruise Control", "Sistema di navigazione", "ABS", "Climatizzatore", "Cerchi in lega", "ESP", "Toyota Safety Sense", "Bluetooth"]
-                        },
-                        {
-                            id: "22890123",
-                            make: "NISSAN",
-                            model: "Qashqai",
-                            version: "1.3 DIG-T 160 CV N-Connecta",
-                            body: "Fuoristrada",
-                            fuel: "Benzina",
-                            year: 2023,
-                            km: 15000,
-                            price: 29500,
-                            power: 160,
-                            cc: 1332,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Automatico",
-                            color: "Bianco",
-                            subtitle: "N-CONNECTA - TECNOLOGIE AVANZATE",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Nissan+Qashqai",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=Qashqai+Interior",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=N-Connecta"
-                            ],
-                            options: ["Cruise Control", "Sistema di navigazione", "ABS", "Climatizzatore", "Cerchi in lega", "ESP", "ProPilot", "NissanConnect", "Telecamere 360°"]
-                        },
-                        {
-                            id: "22901234",
-                            make: "PEUGEOT",
-                            model: "3008",
-                            version: "1.5 BlueHDi 130 CV Allure",
-                            body: "Fuoristrada",
-                            fuel: "Diesel",
-                            year: 2021,
-                            km: 38000,
-                            price: 24900,
-                            power: 130,
-                            cc: 1499,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Manuale",
-                            color: "Nero",
-                            subtitle: "ALLURE - COCKPIT DIGITALE",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Peugeot+3008",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=3008+Cockpit",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=3008+Allure"
-                            ],
-                            options: ["Cruise Control", "Sistema di navigazione", "ABS", "Climatizzatore", "Cerchi in lega", "ESP", "i-Cockpit", "Bluetooth", "Grip Control"]
-                        },
-                        {
-                            id: "23012345",
-                            make: "VOLVO",
-                            model: "XC40",
-                            version: "D3 AWD Geartronic R-Design",
-                            body: "Fuoristrada",
-                            fuel: "Diesel",
-                            year: 2020,
-                            km: 42000,
-                            price: 32900,
-                            power: 150,
-                            cc: 1969,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Automatico",
-                            color: "Blu",
-                            subtitle: "R-DESIGN - AWD",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Volvo+XC40",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=XC40+R-Design",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=XC40+AWD"
-                            ],
-                            options: ["Cruise Control", "Sistema di navigazione", "ABS", "Climatizzatore", "Interni in pelle", "Cerchi in lega", "ESP", "Pilot Assist", "Sensus", "AWD"]
-                        },
-                        {
-                            id: "23123456",
-                            make: "RENAULT",
-                            model: "Captur",
-                            version: "1.0 TCe 100 CV Zen",
-                            body: "Fuoristrada",
-                            fuel: "Benzina",
-                            year: 2022,
-                            km: 19000,
-                            price: 18500,
-                            power: 100,
-                            cc: 999,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Manuale",
-                            color: "Arancione",
-                            subtitle: "ZEN - CITY CAR",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Renault+Captur",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=Captur+Zen",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=Captur+City"
-                            ],
-                            options: ["ABS", "Climatizzatore", "Cerchi in lega", "ESP", "MediaNav", "Bluetooth", "Easy Park Assist"]
-                        },
-                        {
-                            id: "23234567",
-                            make: "HYUNDAI",
-                            model: "Tucson",
-                            version: "1.6 CRDi 136 CV XPossible",
-                            body: "Fuoristrada",
-                            fuel: "Diesel",
-                            year: 2021,
-                            km: 33000,
-                            price: 26500,
-                            power: 136,
-                            cc: 1598,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Manuale",
-                            color: "Grigio",
-                            subtitle: "XPOSSIBLE - GARANZIA 7 ANNI",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Hyundai+Tucson",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=Tucson+Interior",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=Tucson+XPossible"
-                            ],
-                            options: ["Cruise Control", "Sistema di navigazione", "ABS", "Climatizzatore", "Cerchi in lega", "ESP", "SmartSense", "Bluetooth", "Garanzia 7 anni"]
-                        },
-                        {
-                            id: "23345678",
-                            make: "KIA",
-                            model: "Sportage",
-                            version: "1.6 CRDi 136 CV Business",
-                            body: "Fuoristrada",
-                            fuel: "Diesel",
-                            year: 2020,
-                            km: 48000,
-                            price: 22900,
-                            power: 136,
-                            cc: 1598,
-                            doors: 5,
-                            seats: 5,
-                            gearbox: "Manuale",
-                            color: "Rosso",
-                            subtitle: "BUSINESS - GARANZIA 7 ANNI",
-                            images: [
-                                "https://via.placeholder.com/400x250/1e40af/ffffff?text=Kia+Sportage",
-                                "https://via.placeholder.com/400x250/3b82f6/ffffff?text=Sportage+Business",
-                                "https://via.placeholder.com/400x250/f97316/ffffff?text=Sportage+Interior"
-                            ],
-                            options: ["Cruise Control", "Sistema di navigazione", "ABS", "Climatizzatore", "Cerchi in lega", "ESP", "UVO Connect", "Bluetooth", "Garanzia 7 anni"]
                         }
                     ];
 
@@ -1601,580 +1397,561 @@
                     resolve();
                 }, 1500);
             });
-            }
+        }
 
+        // Inizializza i filtri
+        function initializeFilters() {
+            const brandSelect = document.getElementById('brand');
+            const modelSelect = document.getElementById('model');
+            const fuelSelect = document.getElementById('fuel');
+            const yearSelect = document.getElementById('year');
 
-            // Inizializza i filtri
-            function initializeFilters() {
-                const brandSelect = document.getElementById('brand');
-                const modelSelect = document.getElementById('model');
-                const fuelSelect = document.getElementById('fuel');
-                const yearSelect = document.getElementById('year');
+            // Debug: verifica che i dati esistano
+            console.log('Cars data length:', carsData.length);
 
-                // Popola marche
-                const brands = [...new Set(carsData.map(car => car.make))].sort();
-                brands.forEach(brand => {
-                    const option = document.createElement('option');
-                    option.value = brand;
-                    option.textContent = brand;
-                    brandSelect.appendChild(option);
-                });
+            // Pulisci i select prima di popolarli
+            brandSelect.innerHTML = '<option value="">Tutte le marche</option>';
+            modelSelect.innerHTML = '<option value="">Tutti i modelli</option>';
+            fuelSelect.innerHTML = '<option value="">Tutti i carburanti</option>';
+            yearSelect.innerHTML = '<option value="">Qualsiasi anno</option>';
 
-                // Popola carburanti
-                const fuels = [...new Set(carsData.map(car => car.fuel))].sort();
-                fuels.forEach(fuel => {
-                    const option = document.createElement('option');
-                    option.value = fuel;
-                    option.textContent = fuel;
-                    fuelSelect.appendChild(option);
-                });
+            // Popola marche
+            const brands = [...new Set(carsData.map(car => car.make))].sort();
+            console.log('Brands found:', brands);
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
 
-                // Popola anni
-                const years = [...new Set(carsData.map(car => car.year))].sort((a, b) => b - a);
-                years.forEach(year => {
-                    const option = document.createElement('option');
-                    option.value = year;
-                    option.textContent = year;
-                    yearSelect.appendChild(option);
-                });
+            // Popola carburanti
+            const fuels = [...new Set(carsData.map(car => car.fuel))].sort();
+            console.log('Fuels found:', fuels);
+            fuels.forEach(fuel => {
+                const option = document.createElement('option');
+                option.value = fuel;
+                option.textContent = fuel;
+                fuelSelect.appendChild(option);
+            });
 
-                // Event listener per aggiornare modelli
-                brandSelect.addEventListener('change', function () {
-                    const selectedBrand = this.value;
-                    modelSelect.innerHTML = '<option value="">Tutti i modelli</option>';
+            // Popola anni
+            const years = [...new Set(carsData.map(car => car.year))].sort((a, b) => b - a);
+            console.log('Years found:', years);
+            years.forEach(year => {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            });
 
-                    if (selectedBrand) {
-                        const models = [...new Set(carsData
-                            .filter(car => car.make === selectedBrand)
-                            .map(car => car.model))].sort();
+            // Event listener per aggiornare modelli
+            brandSelect.addEventListener('change', function () {
+                const selectedBrand = this.value;
+                modelSelect.innerHTML = '<option value="">Tutti i modelli</option>';
 
-                        models.forEach(model => {
-                            const option = document.createElement('option');
-                            option.value = model;
-                            option.textContent = model;
-                            modelSelect.appendChild(option);
-                        });
-                    }
-                });
-            }
+                if (selectedBrand) {
+                    const models = [...new Set(carsData
+                        .filter(car => car.make === selectedBrand)
+                        .map(car => car.model))].sort();
 
-            // Visualizza le auto
-            function displayCars() {
-                const container = document.getElementById('cars-container');
-
-                if (filteredCars.length === 0) {
-                    container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: var(--gray-medium);">
-                        <i class="fas fa-search" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                        <h3>Nessuna auto trovata</h3>
-                        <p>Prova a modificare i filtri di ricerca per trovare il veicolo che stai cercando.</p>
-                    </div>
-                `;
-                    return;
-                }
-
-                container.innerHTML = filteredCars.map((car, index) => `
-                <div class="car-card fade-in" style="animation-delay: ${index * 0.1}s">
-                    ${car.km < 1000 ? '<div class="car-badge">KM 0</div>' : ''}
-                    <button class="favorite-btn ${favorites.includes(car.id) ? 'active' : ''}" onclick="toggleFavorite('${car.id}')">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                    <div class="car-image">
-                        <img src="${car.images[0]}" alt="${car.make} ${car.model}" 
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div style="display: none; align-items: center; justify-content: center; height: 100%; background: var(--light-blue); color: var(--primary-blue); font-size: 3rem;">
-                            <i class="fas fa-car"></i>
-                        </div>
-                    </div>
-                    <div class="car-info">
-                        <h3 class="car-title">${car.make} ${car.model}</h3>
-                        <p class="car-subtitle">${car.version}</p>
-                        ${car.subtitle ? `<p style="color: var(--orange); font-weight: bold; font-size: 0.9rem; margin-bottom: 1rem;">${car.subtitle}</p>` : ''}
-                        <div class="car-details">
-                            <div class="detail-item">
-                                <i class="fas fa-calendar"></i>
-                                <span>${car.year}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-gas-pump"></i>
-                                <span>${car.fuel}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>${car.km.toLocaleString()} km</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-horse"></i>
-                                <span>${car.power} CV</span>
-                            </div>
-                        </div>
-                        <div class="car-price">€ ${car.price.toLocaleString()}</div>
-                        <div class="car-actions">
-                            <button class="btn btn-contact" onclick="contactForCar('${car.id}')">
-                                <i class="fas fa-phone"></i>
-                                Contatta
-                            </button>
-                            <button class="btn btn-details" onclick="showCarDetails('${car.id}')">
-                                <i class="fas fa-eye"></i>
-                                Dettagli
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            }
-
-            // Filtra le auto
-            function filterCars() {
-                const brand = document.getElementById('brand').value;
-                const model = document.getElementById('model').value;
-                const fuel = document.getElementById('fuel').value;
-                const year = parseInt(document.getElementById('year').value) || 0;
-                const minPrice = parseInt(document.getElementById('price-min').value) || 0;
-                const maxPrice = parseInt(document.getElementById('price-max').value) || Infinity;
-                const searchTerm = document.querySelector('.search-input').value.toLowerCase();
-
-                showLoading(true);
-
-                setTimeout(() => {
-                    filteredCars = carsData.filter(car => {
-                        const matchesBrand = !brand || car.make === brand;
-                        const matchesModel = !model || car.model === model;
-                        const matchesFuel = !fuel || car.fuel === fuel;
-                        const matchesYear = year === 0 || car.year >= year;
-                        const matchesPrice = car.price >= minPrice && car.price <= maxPrice;
-                        const matchesSearch = !searchTerm ||
-                            car.make.toLowerCase().includes(searchTerm) ||
-                            car.model.toLowerCase().includes(searchTerm) ||
-                            car.version.toLowerCase().includes(searchTerm) ||
-                            car.fuel.toLowerCase().includes(searchTerm);
-
-                        return matchesBrand && matchesModel && matchesFuel &&
-                            matchesYear && matchesPrice && matchesSearch;
-                    });
-
-                    displayCars();
-                    updateResultsCount();
-                    showLoading(false);
-                }, 800);
-            }
-
-            // Mostra/nascondi loading
-            function showLoading(show) {
-                const loading = document.querySelector('.loading');
-                const container = document.getElementById('cars-container');
-
-                if (show) {
-                    loading.style.display = 'block';
-                    container.style.display = 'none';
-                } else {
-                    loading.style.display = 'none';
-                    container.style.display = 'grid';
-                }
-            }
-
-            // Aggiorna conteggio risultati
-            function updateResultsCount() {
-                const resultsCount = document.getElementById('results-count');
-                const count = filteredCars.length;
-                resultsCount.textContent = `${count} auto ${count === 1 ? 'trovata' : 'trovate'}`;
-            }
-
-            // Toggle preferiti
-            function toggleFavorite(carId) {
-                const index = favorites.indexOf(carId);
-                if (index > -1) {
-                    favorites.splice(index, 1);
-                } else {
-                    favorites.push(carId);
-                }
-
-                localStorage.setItem('ma-auto-favorites', JSON.stringify(favorites));
-                updateFavoritesCount();
-
-                if (document.querySelector('.view-btn:nth-child(3)').classList.contains('active')) {
-                    showFavorites();
-                } else {
-                    displayCars();
-                }
-            }
-
-            // Aggiorna conteggio preferiti
-            function updateFavoritesCount() {
-                document.getElementById('favorites-count').textContent = favorites.length;
-            }
-
-            // Mostra preferiti
-            function showFavorites() {
-                filteredCars = carsData.filter(car => favorites.includes(car.id));
-                displayCars();
-                updateResultsCount();
-
-                document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelector('.view-btn:nth-child(3)').classList.add('active');
-            }
-
-            // Cambia vista
-            function setView(view) {
-                currentView = view;
-                const container = document.getElementById('cars-container');
-
-                document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-                event.target.classList.add('active');
-
-                if (view === 'list') {
-                    container.style.gridTemplateColumns = '1fr';
-                } else {
-                    container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(350px, 1fr))';
-                }
-
-                if (!event.target.querySelector('.fa-heart')) {
-                    filteredCars = [...carsData];
-                    displayCars();
-                    updateResultsCount();
-                }
-            }
-
-            // Mostra dettagli auto
-            function showCarDetails(carId) {
-                const car = carsData.find(c => c.id === carId);
-                if (!car) return;
-
-                const modal = document.getElementById('car-modal');
-                const modalTitle = document.getElementById('modal-title');
-                const modalBody = document.getElementById('modal-body');
-
-                modalTitle.textContent = `${car.make} ${car.model} ${car.version}`;
-
-                modalBody.innerHTML = `
-                <div class="image-gallery">
-                    ${car.images.map(img => `
-                        <img src="${img}" alt="${car.make} ${car.model}" class="gallery-image"
-                             onerror="this.style.display='none';">
-                    `).join('')}
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0;">
-                    <div><strong>Anno:</strong> ${car.year}</div>
-                    <div><strong>Carburante:</strong> ${car.fuel}</div>
-                    <div><strong>Chilometri:</strong> ${car.km.toLocaleString()} km</div>
-                    <div><strong>Potenza:</strong> ${car.power} CV</div>
-                    <div><strong>Cilindrata:</strong> ${car.cc} cc</div>
-                    <div><strong>Cambio:</strong> ${car.gearbox}</div>
-                    <div><strong>Porte:</strong> ${car.doors}</div>
-                    <div><strong>Posti:</strong> ${car.seats}</div>
-                    <div><strong>Colore:</strong> ${car.color}</div>
-                    <div><strong>Carrozzeria:</strong> ${car.body}</div>
-                </div>
-
-                <div style="margin: 2rem 0;">
-                    <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">Optional e Dotazioni</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
-                        ${car.options.map(option => `
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-check" style="color: var(--success);"></i>
-                                <span>${option}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <div style="text-align: center; margin: 2rem 0; padding: 2rem; background: var(--light-blue); border-radius: 1rem;">
-                    <div style="font-size: 2.5rem; font-weight: bold; color: var(--orange); margin-bottom: 1rem;">
-                        € ${car.price.toLocaleString()}
-                    </div>
-                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                        <button onclick="contactForCar('${car.id}')" class="btn btn-primary">
-                            <i class="fas fa-phone"></i> Contatta Ora
-                        </button>
-                        <button onclick="toggleFavorite('${car.id}'); updateModalFavoriteBtn('${car.id}');" class="btn ${favorites.includes(car.id) ? 'btn-primary' : 'btn-secondary'}" id="modal-fav-btn">
-                            <i class="fas fa-heart"></i> ${favorites.includes(car.id) ? 'Rimuovi' : 'Aggiungi'} ai Preferiti
-                        </button>
-                    </div>
-                </div>
-            `;
-
-                modal.style.display = 'flex';
-            }
-
-            // Aggiorna pulsante preferiti nel modal
-            function updateModalFavoriteBtn(carId) {
-                const btn = document.getElementById('modal-fav-btn');
-                if (favorites.includes(carId)) {
-                    btn.className = 'btn btn-primary';
-                    btn.innerHTML = '<i class="fas fa-heart"></i> Rimuovi dai Preferiti';
-                } else {
-                    btn.className = 'btn btn-secondary';
-                    btn.innerHTML = '<i class="fas fa-heart"></i> Aggiungi ai Preferiti';
-                }
-            }
-
-            // Chiudi modal
-            function closeModal() {
-                document.getElementById('car-modal').style.display = 'none';
-            }
-
-            // Contatta per auto
-            function contactForCar(carId) {
-                const car = carsData.find(c => c.id === carId);
-                const message = `Salve, sono interessato/a alla ${car.make} ${car.model} ${car.version} (Rif: ${car.id}) al prezzo di € ${car.price.toLocaleString()}. Potete fornirmi maggiori informazioni?`;
-
-                const whatsappUrl = `https://wa.me/393331234567?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-
-                alert('Ti stiamo reindirizzando a WhatsApp per contattarci direttamente!');
-            }
-
-            // Navigazione mobile
-            function initializeNavigation() {
-                const navToggle = document.querySelector('.nav-toggle');
-                const navMenu = document.querySelector('.nav-menu');
-
-                if (navToggle) {
-                    navToggle.addEventListener('click', function () {
-                        navMenu.classList.toggle('active');
+                    models.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model;
+                        option.textContent = model;
+                        modelSelect.appendChild(option);
                     });
                 }
+            });
+        }
 
-                // Smooth scrolling
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        if (navMenu) navMenu.classList.remove('active');
+        // Visualizza le auto
+        function displayCars() {
+            const container = document.getElementById('cars-container');
 
-                        const target = document.querySelector(this.getAttribute('href'));
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                    });
-                });
-
-                // Header scroll effect
-                window.addEventListener('scroll', function () {
-                    const header = document.querySelector('.header');
-                    if (window.scrollY > 100) {
-                        header.style.boxShadow = 'var(--shadow-lg)';
-                    } else {
-                        header.style.boxShadow = 'var(--shadow)';
-                    }
-                });
-            }
-
-            // Inizializza contatori animati
-            function initializeCounters() {
-                const counters = document.querySelectorAll('[data-count]');
-                const observer = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const counter = entry.target;
-                            const target = parseInt(counter.dataset.count);
-                            const increment = target / 50;
-                            let current = 0;
-
-                            const updateCounter = () => {
-                                if (current < target) {
-                                    current += increment;
-                                    counter.textContent = Math.ceil(current);
-                                    setTimeout(updateCounter, 30);
-                                } else {
-                                    counter.textContent = target;
-                                }
-                            };
-
-                            updateCounter();
-                            observer.unobserve(counter);
-                        }
-                    });
-                });
-
-                counters.forEach(counter => observer.observe(counter));
-            }
-
-            // Mostra errore
-            function showError(message) {
-                const container = document.getElementById('cars-container');
+            if (filteredCars.length === 0) {
                 container.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: var(--gray-medium);">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 4rem; margin-bottom: 1rem; color: var(--orange);"></i>
-                    <h3>Ops! Qualcosa è andato storto</h3>
-                    <p>${message}</p>
-                    <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 1rem;">
-                        <i class="fas fa-redo"></i> Riprova
-                    </button>
+                    <i class="fas fa-search" style="font-size: 4rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <h3>Nessuna auto trovata</h3>
+                    <p>Prova a modificare i filtri di ricerca per trovare il veicolo che stai cercando.</p>
                 </div>
             `;
+                return;
             }
 
-            // Gestione click fuori dal modal
-            window.addEventListener('click', function (event) {
-                const modal = document.getElementById('car-modal');
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
+            container.innerHTML = filteredCars.map((car, index) => `
+            <div class="car-card fade-in" style="animation-delay: ${index * 0.1}s">
+                ${car.km < 1000 ? '<div class="car-badge">KM 0</div>' : ''}
+                <button class="favorite-btn ${favorites.includes(car.id) ? 'active' : ''}" onclick="toggleFavorite('${car.id}')">
+                    <i class="fas fa-heart"></i>
+                </button>
+                <div class="car-image">
+                    <img src="${car.images[0]}" alt="${car.make} ${car.model}" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div style="display: none; align-items: center; justify-content: center; height: 100%; background: var(--light-blue); color: var(--primary-blue); font-size: 3rem;">
+                        <i class="fas fa-car"></i>
+                    </div>
+                </div>
+                <div class="car-info">
+                    <h3 class="car-title">${car.make} ${car.model}</h3>
+                    <p class="car-subtitle">${car.version}</p>
+                    ${car.subtitle ? `<p style="color: var(--orange); font-weight: bold; font-size: 0.9rem; margin-bottom: 1rem;">${car.subtitle}</p>` : ''}
+                    <div class="car-details">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>${car.year}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>${car.fuel}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>${car.km.toLocaleString()} km</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-horse"></i>
+                            <span>${car.power} CV</span>
+                        </div>
+                    </div>
+                    <div class="car-price">€ ${car.price.toLocaleString()}</div>
+                    <div class="car-actions">
+                        <button class="btn btn-contact" onclick="contactForCar('${car.id}')">
+                            <i class="fas fa-phone"></i>
+                            Contatta
+                        </button>
+                        <button class="btn btn-details" onclick="showCarDetails('${car.id}')">
+                            <i class="fas fa-eye"></i>
+                            Dettagli
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        }
 
-            // Auto-complete per ricerca
-            document.querySelector('.search-input').addEventListener('input', function () {
-                const value = this.value.toLowerCase();
-                if (value.length > 2) {
-                    console.log('Searching for:', value);
-                }
-            });
+        // Filtra le auto
+        function filterCars() {
+            const brand = document.getElementById('brand').value;
+            const model = document.getElementById('model').value;
+            const fuel = document.getElementById('fuel').value;
+            const year = parseInt(document.getElementById('year').value) || 0;
+            const minPrice = parseInt(document.getElementById('price-min').value) || 0;
+            const maxPrice = parseInt(document.getElementById('price-max').value) || Infinity;
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
 
-            // Gestione tasto Enter nella ricerca
-            document.querySelector('.search-input').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    filterCars();
-                }
-            });
+            showLoading(true);
 
-            // Analytics tracking
-            function trackEvent(eventName, data = null) {
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', eventName, {
-                        'custom_parameter': data,
-                        'timestamp': new Date().toISOString()
-                    });
-                }
-                console.log('Event tracked:', eventName, data);
-            }
+            setTimeout(() => {
+                filteredCars = carsData.filter(car => {
+                    const matchesBrand = !brand || car.make === brand;
+                    const matchesModel = !model || car.model === model;
+                    const matchesFuel = !fuel || car.fuel === fuel;
+                    const matchesYear = year === 0 || car.year >= year;
+                    const matchesPrice = car.price >= minPrice && car.price <= maxPrice;
+                    const matchesSearch = !searchTerm ||
+                        car.make.toLowerCase().includes(searchTerm) ||
+                        car.model.toLowerCase().includes(searchTerm) ||
+                        car.version.toLowerCase().includes(searchTerm) ||
+                        car.fuel.toLowerCase().includes(searchTerm);
 
-            // Gestione errori immagini globale
-            document.addEventListener('error', function (e) {
-                if (e.target.tagName === 'IMG') {
-                    e.target.style.display = 'none';
-                    const placeholder = e.target.nextElementSibling;
-                    if (placeholder) {
-                        placeholder.style.display = 'flex';
-                    }
-                }
-            }, true);
-
-            // Schema.org structured data per SEO
-            function generateStructuredData() {
-                const script = document.createElement('script');
-                script.type = 'application/ld+json';
-                script.innerHTML = JSON.stringify({
-                    "@context": "https://schema.org",
-                    "@type": "AutoDealer",
-                    "name": "M&A Auto",
-                    "description": "Concessionario auto usate di qualità con garanzia",
-                    "url": window.location.origin,
-                    "telephone": "+39-02-1234567",
-                    "address": {
-                        "@type": "PostalAddress",
-                        "streetAddress": "Via Roma 123",
-                        "addressLocality": "Milano",
-                        "postalCode": "20100",
-                        "addressCountry": "IT"
-                    },
-                    "geo": {
-                        "@type": "GeoCoordinates",
-                        "latitude": 45.4642,
-                        "longitude": 9.1900
-                    },
-                    "openingHours": "Mo-Fr 09:00-19:00, Sa 09:00-18:00"
+                    return matchesBrand && matchesModel && matchesFuel &&
+                        matchesYear && matchesPrice && matchesSearch;
                 });
-                document.head.appendChild(script);
+
+                displayCars();
+                updateResultsCount();
+                showLoading(false);
+            }, 800);
+        }
+
+        // Mostra/nascondi loading
+        function showLoading(show) {
+            const loading = document.querySelector('.loading');
+            const container = document.getElementById('cars-container');
+
+            if (show) {
+                loading.style.display = 'block';
+                container.style.display = 'none';
+            } else {
+                loading.style.display = 'none';
+                container.style.display = 'grid';
+            }
+        }
+
+        // Aggiorna conteggio risultati
+        function updateResultsCount() {
+            const resultsCount = document.getElementById('results-count');
+            const count = filteredCars.length;
+            resultsCount.textContent = `${count} auto ${count === 1 ? 'trovata' : 'trovate'}`;
+        }
+
+        // Toggle preferiti
+        function toggleFavorite(carId) {
+            const index = favorites.indexOf(carId);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(carId);
             }
 
-            // Service Worker per PWA
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function () {
-                    navigator.serviceWorker.register('/sw.js')
-                        .then(function (registration) {
-                            console.log('SW registered: ', registration);
-                        })
-                        .catch(function (registrationError) {
-                            console.log('SW registration failed: ', registrationError);
-                        });
-                });
+            localStorage.setItem('ma-auto-favorites', JSON.stringify(favorites));
+            updateFavoritesCount();
+
+            if (document.querySelector('.view-btn:nth-child(3)').classList.contains('active')) {
+                showFavorites();
+            } else {
+                displayCars();
+            }
+        }
+
+        // Aggiorna conteggio preferiti
+        function updateFavoritesCount() {
+            document.getElementById('favorites-count').textContent = favorites.length;
+        }
+
+        // Mostra preferiti
+        function showFavorites() {
+            filteredCars = carsData.filter(car => favorites.includes(car.id));
+            displayCars();
+            updateResultsCount();
+
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.view-btn:nth-child(3)').classList.add('active');
+        }
+
+        // Cambia vista
+        function setView(view) {
+            currentView = view;
+            const container = document.getElementById('cars-container');
+
+            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (view === 'list') {
+                container.style.gridTemplateColumns = '1fr';
+            } else {
+                container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(350px, 1fr))';
             }
 
-            // Inizializza structured data
-            generateStructuredData();
-
-            // Funzioni di utilità
-            function resetFilters() {
-                document.getElementById('brand').value = '';
-                document.getElementById('model').value = '';
-                document.getElementById('fuel').value = '';
-                document.getElementById('year').value = '';
-                document.getElementById('price-min').value = '';
-                document.getElementById('price-max').value = '';
-                document.querySelector('.search-input').value = '';
-
+            if (!event.target.querySelector('.fa-heart')) {
                 filteredCars = [...carsData];
                 displayCars();
                 updateResultsCount();
             }
+        }
 
-            // Filtri rapidi
-            function quickFilter(type) {
-                resetFilters();
+        // Mostra dettagli auto
+        function showCarDetails(carId) {
+            const car = carsData.find(c => c.id === carId);
+            if (!car) return;
 
-                switch (type) {
-                    case 'economiche':
-                        document.getElementById('price-max').value = '25000';
-                        break;
-                    case 'recenti':
-                        document.getElementById('year').value = '2020';
-                        break;
-                    case 'km0':
-                        filteredCars = carsData.filter(car => car.km < 1000);
-                        displayCars();
-                        updateResultsCount();
-                        return;
-                    case 'lusso':
-                        document.getElementById('price-min').value = '50000';
-                        break;
-                }
+            const modal = document.getElementById('car-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
 
-                if (type !== 'km0') {
-                    filterCars();
-                }
+            modalTitle.textContent = `${car.make} ${car.model} ${car.version}`;
+
+            modalBody.innerHTML = `
+            <div class="image-gallery">
+                ${car.images.map(img => `
+                    <img src="${img}" alt="${car.make} ${car.model}" class="gallery-image"
+                         onerror="this.style.display='none';">
+                `).join('')}
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0;">
+                <div><strong>Anno:</strong> ${car.year}</div>
+                <div><strong>Carburante:</strong> ${car.fuel}</div>
+                <div><strong>Chilometri:</strong> ${car.km.toLocaleString()} km</div>
+                <div><strong>Potenza:</strong> ${car.power} CV</div>
+                <div><strong>Cilindrata:</strong> ${car.cc} cc</div>
+                <div><strong>Cambio:</strong> ${car.gearbox}</div>
+                <div><strong>Porte:</strong> ${car.doors}</div>
+                <div><strong>Posti:</strong> ${car.seats}</div>
+                <div><strong>Colore:</strong> ${car.color}</div>
+                <div><strong>Carrozzeria:</strong> ${car.body}</div>
+            </div>
+
+            <div style="margin: 2rem 0;">
+                <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">Optional e Dotazioni</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+                    ${car.options.map(option => `
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-check" style="color: var(--success);"></i>
+                            <span>${option}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 2rem 0; padding: 2rem; background: var(--light-blue); border-radius: 1rem;">
+                <div style="font-size: 2.5rem; font-weight: bold; color: var(--orange); margin-bottom: 1rem;">
+                    € ${car.price.toLocaleString()}
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="contactForCar('${car.id}')" class="btn btn-primary">
+                        <i class="fas fa-phone"></i> Contatta Ora
+                    </button>
+                    <button onclick="toggleFavorite('${car.id}'); updateModalFavoriteBtn('${car.id}');" class="btn ${favorites.includes(car.id) ? 'btn-primary' : 'btn-secondary'}" id="modal-fav-btn">
+                        <i class="fas fa-heart"></i> ${favorites.includes(car.id) ? 'Rimuovi' : 'Aggiungi'} ai Preferiti
+                    </button>
+                </div>
+            </div>
+        `;
+
+            modal.style.display = 'flex';
+        }
+
+        // Aggiorna pulsante preferiti nel modal
+        function updateModalFavoriteBtn(carId) {
+            const btn = document.getElementById('modal-fav-btn');
+            if (favorites.includes(carId)) {
+                btn.className = 'btn btn-primary';
+                btn.innerHTML = '<i class="fas fa-heart"></i> Rimuovi dai Preferiti';
+            } else {
+                btn.className = 'btn btn-secondary';
+                btn.innerHTML = '<i class="fas fa-heart"></i> Aggiungi ai Preferiti';
+            }
+        }
+
+        // Chiudi modal
+        function closeModal() {
+            document.getElementById('car-modal').style.display = 'none';
+        }
+
+        // Contatta per auto
+        function contactForCar(carId) {
+            const car = carsData.find(c => c.id === carId);
+            const message = `Salve, sono interessato/a alla ${car.make} ${car.model} ${car.version} (Rif: ${car.id}) al prezzo di € ${car.price.toLocaleString()}. Potete fornirmi maggiori informazioni?`;
+
+            const whatsappUrl = `https://wa.me/393331234567?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+
+            alert('Ti stiamo reindirizzando a WhatsApp per contattarci direttamente!');
+        }
+
+        // Navigazione mobile
+        function initializeNavigation() {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+
+            if (navToggle) {
+                navToggle.addEventListener('click', function () {
+                    navMenu.classList.toggle('active');
+                });
             }
 
-            // Aggiunta pulsanti filtri rapidi dopo il caricamento
-            window.addEventListener('load', function () {
-                const filterSection = document.querySelector('.filter-section .container');
-                const quickFiltersHTML = `
-                <div style="text-align: center; margin-top: 2rem;">
-                    <h3 style="margin-bottom: 1rem; color: var(--gray-dark);">Filtri Rapidi</h3>
-                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                        <button onclick="quickFilter('economiche')" class="btn" style="background: var(--light-orange); color: var(--orange); border: 2px solid var(--orange);">
-                            <i class="fas fa-tag"></i> Auto Economiche
-                        </button>
-                        <button onclick="quickFilter('recenti')" class="btn" style="background: var(--light-blue); color: var(--primary-blue); border: 2px solid var(--primary-blue);">
-                            <i class="fas fa-calendar-check"></i> Auto Recenti
-                        </button>
-                        <button onclick="quickFilter('km0')" class="btn" style="background: var(--light-orange); color: var(--orange); border: 2px solid var(--orange);">
-                            <i class="fas fa-star"></i> KM 0
-                        </button>
-                        <button onclick="quickFilter('lusso')" class="btn" style="background: var(--light-blue); color: var(--primary-blue); border: 2px solid var(--primary-blue);">
-                            <i class="fas fa-crown"></i> Auto di Lusso
-                        </button>
-                    </div>
-                </div>
-            `;
-                filterSection.insertAdjacentHTML('beforeend', quickFiltersHTML);
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (navMenu) navMenu.classList.remove('active');
 
-                // Animazioni al caricamento
-                const cards = document.querySelectorAll('.car-card');
-                cards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(30px)';
-
-                    setTimeout(() => {
-                        card.style.transition = 'all 0.6s ease';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, index * 100);
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 });
             });
+
+            // Header scroll effect
+            window.addEventListener('scroll', function () {
+                const header = document.querySelector('.header');
+                if (window.scrollY > 100) {
+                    header.style.boxShadow = 'var(--shadow-lg)';
+                } else {
+                    header.style.boxShadow = 'var(--shadow)';
+                }
+            });
+        }
+
+        // Inizializza contatori animati
+        function initializeCounters() {
+            const counters = document.querySelectorAll('[data-count]');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = parseInt(counter.dataset.count);
+                        const increment = target / 50;
+                        let current = 0;
+
+                        const updateCounter = () => {
+                            if (current < target) {
+                                current += increment;
+                                counter.textContent = Math.ceil(current);
+                                setTimeout(updateCounter, 30);
+                            } else {
+                                counter.textContent = target;
+                            }
+                        };
+
+                        updateCounter();
+                        observer.unobserve(counter);
+                    }
+                });
+            });
+
+            counters.forEach(counter => observer.observe(counter));
+        }
+
+        // Mostra errore
+        function showError(message) {
+            const container = document.getElementById('cars-container');
+            container.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; color: var(--gray-medium);">
+                <i class="fas fa-exclamation-triangle" style="font-size: 4rem; margin-bottom: 1rem; color: var(--orange);"></i>
+                <h3>Ops! Qualcosa è andato storto</h3>
+                <p>${message}</p>
+                <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 1rem;">
+                    <i class="fas fa-redo"></i> Riprova
+                </button>
+            </div>
+        `;
+        }
+
+        // Gestione click fuori dal modal
+        window.addEventListener('click', function (event) {
+            const modal = document.getElementById('car-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Gestione tasto Enter nella ricerca
+        document.querySelector('.search-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                filterCars();
+            }
+        });
+
+        // Gestione errori immagini globale
+        document.addEventListener('error', function (e) {
+            if (e.target.tagName === 'IMG') {
+                e.target.style.display = 'none';
+                const placeholder = e.target.nextElementSibling;
+                if (placeholder) {
+                    placeholder.style.display = 'flex';
+                }
+            }
+        }, true);
+
+        // Schema.org structured data per SEO
+        function generateStructuredData() {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.innerHTML = JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "AutoDealer",
+                "name": "M&A Auto",
+                "description": "Concessionario auto usate di qualità con garanzia",
+                "url": window.location.origin,
+                "telephone": "+39-02-1234567",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Via Roma 123",
+                    "addressLocality": "Milano",
+                    "postalCode": "20100",
+                    "addressCountry": "IT"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 45.4642,
+                    "longitude": 9.1900
+                },
+                "openingHours": "Mo-Fr 09:00-19:00, Sa 09:00-18:00"
+            });
+            document.head.appendChild(script);
+        }
+
+        // Service Worker per PWA (disabilitato per ora)
+        /*
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function (registration) {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(function (registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+        */
+
+        // Inizializza structured data
+        generateStructuredData();
+
+        // Funzioni di utilità
+        function resetFilters() {
+            document.getElementById('brand').value = '';
+            document.getElementById('model').value = '';
+            document.getElementById('fuel').value = '';
+            document.getElementById('year').value = '';
+            document.getElementById('price-min').value = '';
+            document.getElementById('price-max').value = '';
+            document.querySelector('.search-input').value = '';
+
+            filteredCars = [...carsData];
+            displayCars();
+            updateResultsCount();
+        }
+
+        // Filtri rapidi
+        function quickFilter(type) {
+            resetFilters();
+
+            switch (type) {
+                case 'economiche':
+                    document.getElementById('price-max').value = '25000';
+                    break;
+                case 'recenti':
+                    document.getElementById('year').value = '2020';
+                    break;
+                case 'km0':
+                    filteredCars = carsData.filter(car => car.km < 1000);
+                    displayCars();
+                    updateResultsCount();
+                    return;
+                case 'lusso':
+                    document.getElementById('price-min').value = '50000';
+                    break;
+            }
+
+            if (type !== 'km0') {
+                filterCars();
+            }
+        }
+
+        // Aggiunta pulsanti filtri rapidi dopo il caricamento
+        window.addEventListener('load', function () {
+            const filterSection = document.querySelector('.filter-section .container');
+            const quickFiltersHTML = `
+            <div style="text-align: center; margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--gray-dark);">Filtri Rapidi</h3>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="quickFilter('economiche')" class="btn" style="background: var(--light-orange); color: var(--orange); border: 2px solid var(--orange);">
+                        <i class="fas fa-tag"></i> Auto Economiche
+                    </button>
+                    <button onclick="quickFilter('recenti')" class="btn" style="background: var(--light-blue); color: var(--primary-blue); border: 2px solid var(--primary-blue);">
+                        <i class="fas fa-calendar-check"></i> Auto Recenti
+                    </button>
+                    <button onclick="quickFilter('km0')" class="btn" style="background: var(--light-orange); color: var(--orange); border: 2px solid var(--orange);">
+                        <i class="fas fa-star"></i> KM 0
+                    </button>
+                    <button onclick="quickFilter('lusso')" class="btn" style="background: var(--light-blue); color: var(--primary-blue); border: 2px solid var(--primary-blue);">
+                        <i class="fas fa-crown"></i> Auto di Lusso
+                    </button>
+                </div>
+            </div>
+        `;
+            filterSection.insertAdjacentHTML('beforeend', quickFiltersHTML);
+        });
     </script>
 </body>
 
